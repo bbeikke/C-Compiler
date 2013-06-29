@@ -27,13 +27,15 @@ TreeNode* newVarDec(TreeNode* typeSpecifier, char* ID, int lineno)
      root->child[0] = typeSpecifier;
      root->attr.name = strdup(ID);
      root->type = TYPE_INTEGER;
-     pushTable(CompoundST);
+     if(!GLOBAL)
+          pushTable(CompoundST);
      VarSymbol* vs = lookup_var(root->attr.name);
      if(vs != NULL)
           ErrorMsg(root, "variable has been declared before: ", ID);
      else
           insert_var(root->attr.name, GLOBAL, CompoundST->startOffset++, TYPE_INTEGER);
-     popTable();
+     if(!GLOBAL)
+          popTable();
      return root;
 }
 // var_declaration: type_specifier ID LSB NUMBER RSB SEMI
@@ -92,6 +94,8 @@ TreeNode* newFunDec(TreeNode* typeSpecifier, char* ID, TreeNode* params, TreeNod
      {
           fprintf(stderr, "%d: return type is conflict with function declaration\n", root->lineno);
      }
+     /* change GLOBAL flag to true as function declaration come to end */
+     GLABAL = TRUE;
      return root;
 }
 // paramList==NULL => params: VOID
@@ -102,6 +106,8 @@ TreeNode* newParams(TreeNode* paramList)
      TreeNode* temp;
      pushTable(ParamST);
      ParamST = newSymbolTable(PARAM);
+     /* change GLOBAL flag to false as function declaration begins */
+     GLOBAL = FALSE;
      if(paramList != NULL)
      {
           for(temp=paramList;temp!=NULL;temp++)
