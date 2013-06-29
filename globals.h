@@ -36,8 +36,7 @@ extern int yylineno;
 extern char* yytext;
 
 
-int GLOBAL = TRUE;
-
+extern int GLOBAL_ST;
 /**************************************************/
 /***********   Syntax tree for parsing ************/
 /**************************************************/

@@ -14,6 +14,7 @@ FILE* listing; /* listing output text file */
 FILE* code; /* code text file for TM simulator */
 
 TreeNode* ASTRoot;
+int GLOBAL_ST = TRUE;
 
 void init()
 {
